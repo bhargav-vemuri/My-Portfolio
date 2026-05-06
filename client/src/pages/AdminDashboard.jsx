@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 // Helper for authenticated requests
 const apiFetch = async (url, options = {}) => {
-  return fetch(`http://localhost:5000${url}`, {
+  return fetch(`https://my-portfolio-ek2r.onrender.com${url}`, {
     ...options,
     credentials: "include", // Send cookies!
     headers: {
@@ -22,10 +22,10 @@ export default function AdminDashboard() {
   const fetchAllData = async () => {
     try {
       const [p, e, ed, s] = await Promise.all([
-        fetch('http://localhost:5000/api/projects').then(r => r.json()),
-        fetch('http://localhost:5000/api/experience').then(r => r.json()),
-        fetch('http://localhost:5000/api/education').then(r => r.json()),
-        fetch('http://localhost:5000/api/skills').then(r => r.json())
+        fetch('https://my-portfolio-ek2r.onrender.com/api/projects').then(r => r.json()),
+        fetch('https://my-portfolio-ek2r.onrender.com/api/experience').then(r => r.json()),
+        fetch('https://my-portfolio-ek2r.onrender.com/api/education').then(r => r.json()),
+        fetch('https://my-portfolio-ek2r.onrender.com/api/skills').then(r => r.json())
       ]);
       setData({
         projects: Array.isArray(p) ? p : [],

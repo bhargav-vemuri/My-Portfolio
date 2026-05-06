@@ -8,7 +8,7 @@ export default function AdminLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:5000/api/auth', {
+    const res = await fetch('https://my-portfolio-ek2r.onrender.com/api/auth', {
       method: 'POST',
       body: JSON.stringify({ password }),
       headers: { 'Content-Type': 'application/json' },
