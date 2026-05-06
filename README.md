@@ -18,7 +18,7 @@ cd server
 npm install
 npm start
 ```
-The backend will run on `http://localhost:5000`.
+The backend will run on `https://my-portfolio-ek2r.onrender.com`.
 
 **Environment Variables (`server/.env`):**
 ```env
@@ -29,7 +29,7 @@ PORT=5000
 ```
 
 **Seeding the Database:**
-To populate the initial cinematic data, navigate to `http://localhost:5000/api/seed` in your browser.
+To populate the initial cinematic data, navigate to `https://my-portfolio-ek2r.onrender.com/api/seed` in your browser.
 
 ### 3. Frontend Initialization
 In a new terminal tab:
