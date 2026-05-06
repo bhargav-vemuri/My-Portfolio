@@ -19,10 +19,10 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      fetch(`${API_URL}/api/projects`).then(r => r.json()),
-      fetch(`${API_URL}/api/experience`).then(r => r.json()),
-      fetch(`${API_URL}/api/education`).then(r => r.json()),
-      fetch(`${API_URL}/api/skills`).then(r => r.json())
+      fetch(`${API_URL}/api/projects`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/experience`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/education`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/skills`, { credentials: 'include' }).then(r => r.json())
     ]).then(([p, e, ed, s]) => {
       // Provide fallback empty arrays if backend is disconnected
       setProjects(Array.isArray(p) ? p : []);

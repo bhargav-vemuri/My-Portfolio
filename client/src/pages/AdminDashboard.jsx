@@ -24,10 +24,10 @@ export default function AdminDashboard() {
   const fetchAllData = async () => {
     try {
       const [p, e, ed, s] = await Promise.all([
-        fetch(`${API_URL}/api/projects`).then(r => r.json()),
-        fetch(`${API_URL}/api/experience`).then(r => r.json()),
-        fetch(`${API_URL}/api/education`).then(r => r.json()),
-        fetch(`${API_URL}/api/skills`).then(r => r.json())
+        apiFetch('/api/projects').then(r => r.json()),
+        apiFetch('/api/experience').then(r => r.json()),
+        apiFetch('/api/education').then(r => r.json()),
+        apiFetch('/api/skills').then(r => r.json())
       ]);
       setData({
         projects: Array.isArray(p) ? p : [],
