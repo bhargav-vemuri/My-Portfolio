@@ -12,7 +12,10 @@ const { Project, Experience, Education, Skill } = require('./models');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173', // Vite default port
+  origin: [
+    'http://localhost:5173',
+    'https://my-portfolio-seven-rho-42.vercel.app'
+  ],
   credentials: true
 }));
 app.use(express.json());
