@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = "https://my-portfolio-ek2r.onrender.com";
+
 export default function AdminLogin() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -8,7 +10,7 @@ export default function AdminLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch('https://my-portfolio-ek2r.onrender.com/api/auth', {
+    const res = await fetch(`${API_URL}/api/auth`, {
       method: 'POST',
       body: JSON.stringify({ password }),
       headers: { 'Content-Type': 'application/json' },

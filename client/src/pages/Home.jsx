@@ -8,6 +8,8 @@ import { Act4Education } from '../components/Act4Education';
 import { Act5Skills } from '../components/Act5Skills';
 import { EndCredits } from '../components/EndCredits';
 
+const API_URL = "https://my-portfolio-ek2r.onrender.com";
+
 export default function Home() {
   const [projects, setProjects] = useState([]);
   const [experience, setExperience] = useState([]);
@@ -17,10 +19,10 @@ export default function Home() {
 
   useEffect(() => {
     Promise.all([
-      fetch('https://my-portfolio-ek2r.onrender.com/api/projects').then(r => r.json()),
-      fetch('https://my-portfolio-ek2r.onrender.com/api/experience').then(r => r.json()),
-      fetch('https://my-portfolio-ek2r.onrender.com/api/education').then(r => r.json()),
-      fetch('https://my-portfolio-ek2r.onrender.com/api/skills').then(r => r.json())
+      fetch(`${API_URL}/api/projects`).then(r => r.json()),
+      fetch(`${API_URL}/api/experience`).then(r => r.json()),
+      fetch(`${API_URL}/api/education`).then(r => r.json()),
+      fetch(`${API_URL}/api/skills`).then(r => r.json())
     ]).then(([p, e, ed, s]) => {
       // Provide fallback empty arrays if backend is disconnected
       setProjects(Array.isArray(p) ? p : []);
