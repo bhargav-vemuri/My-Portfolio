@@ -52,13 +52,10 @@ export function Act1About() {
           className="prose prose-invert max-w-none"
         >
           <p className="text-xl text-muted leading-relaxed mb-6">
-            I am a developer driven by the intersection of AI, machine learning, and full-stack engineering. 
-            My work focuses on crafting systems that are not only architecturally robust but also deliver 
-            seamless, highly optimized user experiences. I specialize in building solutions that bridge 
-            the gap between complex data pipelines and elegant, user-centric interfaces.
+            I'm a software engineer passionate about building intelligent, scalable systems that bridge AI and modern software engineering. My experience spans enterprise backend development, full-stack applications, distributed systems, and retrieval-augmented AI, with an emphasis on clean architecture, performance, and developer-friendly design.
           </p>
           <p className="text-xl text-muted leading-relaxed mb-8">
-            Currently pursuing my B.Tech in CSE with a specialization in AI & ML, I thrive in environments that challenge me to push technical boundaries. Whether I'm optimizing algorithms or designing high-performance React architectures, my goal is always to engineer products that create tangible, real-world impact.
+            I enjoy turning ambitious ideas into production-ready software—whether it's designing event-driven backend services, building AI-powered applications, or crafting seamless user experiences. My goal is to engineer products that solve meaningful problems while maintaining high standards of scalability, reliability, and usability.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-6 mt-12 border-t border-muted/20 pt-12">
