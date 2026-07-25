@@ -11,7 +11,6 @@ export function Act5Skills({ skills = [] }) {
       
       <div className="max-w-4xl w-full text-center mb-16 z-10 relative">
         <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 mb-8 drop-shadow-md pb-2">Act V: The Armory</h2>
-        <p className="text-muted max-w-lg mx-auto text-lg">Full-stack technologies and Machine Learning frameworks.</p>
       </div>
       
       <div className="relative w-full max-w-3xl flex flex-wrap justify-center items-center gap-4 z-10">
