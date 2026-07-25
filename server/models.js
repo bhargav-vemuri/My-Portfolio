@@ -6,7 +6,8 @@ const ProjectSchema = new mongoose.Schema({
   problem: { type: String, required: true },
   approach: { type: String, required: true },
   impact: { type: String, required: true },
-  link: { type: String, required: true }
+  link: { type: String, required: true },
+  order: { type: Number, default: 0 }
 }, { timestamps: true });
 
 const ExperienceSchema = new mongoose.Schema({

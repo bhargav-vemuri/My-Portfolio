@@ -176,7 +176,8 @@ const projectSchema = z.object({
   problem: z.string(),
   approach: z.string(),
   impact: z.string(),
-  link: z.string().url("Must be a valid URL").optional().or(z.literal(''))
+  link: z.string().url("Must be a valid URL").optional().or(z.literal('')),
+  order: z.number().optional()
 });
 
 const experienceSchema = z.object({
@@ -220,7 +221,8 @@ const buildCrudRoutes = (model, path) => {
 
   app.get(`/api/${path}`, async (req, res) => {
     try {
-      const data = await model.find().sort({ createdAt: 1 });
+      const sortOption = path === 'projects' ? { order: 1, createdAt: 1 } : { createdAt: 1 };
+      const data = await model.find().sort(sortOption);
       res.json(data);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -254,6 +256,25 @@ const buildCrudRoutes = (model, path) => {
     }
   });
 };
+
+app.put('/api/projects/reorder', requireAdmin, async (req, res) => {
+  try {
+    const { orders } = req.body;
+    if (!Array.isArray(orders)) {
+      return res.status(400).json({ error: "orders must be an array" });
+    }
+    const bulkOps = orders.map(item => ({
+      updateOne: {
+        filter: { _id: item.id },
+        update: { $set: { order: item.order } }
+      }
+    }));
+    await Project.bulkWrite(bulkOps);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 buildCrudRoutes(Project, 'projects');
 buildCrudRoutes(Experience, 'experience');

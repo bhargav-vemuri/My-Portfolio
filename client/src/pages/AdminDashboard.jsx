@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowUp, ArrowDown } from "lucide-react";
 
 const API_URL = "https://my-portfolio-ek2r.onrender.com";
 
@@ -125,6 +126,36 @@ function ProjectsTab({ data, refresh }) {
     setFormData({ title: "", year: "", problem: "", approach: "", impact: "", link: "" });
   };
 
+  const handleMove = async (index, direction) => {
+    const newData = [...data];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= data.length) return;
+
+    const temp = newData[index];
+    newData[index] = newData[targetIndex];
+    newData[targetIndex] = temp;
+
+    const orders = newData.map((p, idx) => ({
+      id: p._id,
+      order: idx
+    }));
+
+    try {
+      const res = await apiFetch('/api/projects/reorder', {
+        method: 'PUT',
+        body: JSON.stringify({ orders })
+      });
+      if (res.ok) {
+        refresh();
+      } else {
+        alert("Failed to save new order");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error reordering projects");
+    }
+  };
+
   if (editingId) return (
     <div className="bg-[#0f172a]/20 p-8 rounded-xl border border-muted/10 flex flex-col gap-4 shadow-xl">
       <h2 className="text-2xl text-accent font-serif mb-4">{editingId === "new" ? "New Project" : "Edit Project"}</h2>
@@ -144,13 +175,31 @@ function ProjectsTab({ data, refresh }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-end"><button onClick={openNew} className="bg-accent text-background px-6 py-2 rounded font-bold uppercase tracking-wider">Add Project</button></div>
-      {data.map(p => (
+      {data.map((p, index) => (
         <div key={p._id} className="p-6 border border-muted/20 rounded-xl bg-[#0f172a]/20 flex justify-between items-start shadow-md hover:border-accent/30 transition-colors">
           <div>
             <h3 className="font-bold text-xl">{p.title} <span className="font-normal text-muted">({p.year})</span></h3>
             <p className="text-muted mt-2 text-sm max-w-3xl line-clamp-2">{p.problem}</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex gap-1 mr-2 border border-muted/20 rounded-full px-2 py-1 bg-background/30">
+              <button 
+                onClick={() => handleMove(index, "up")} 
+                disabled={index === 0} 
+                className="text-muted hover:text-accent disabled:opacity-20 disabled:pointer-events-none transition-colors"
+                title="Move Up"
+              >
+                <ArrowUp className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => handleMove(index, "down")} 
+                disabled={index === data.length - 1} 
+                className="text-muted hover:text-accent disabled:opacity-20 disabled:pointer-events-none transition-colors"
+                title="Move Down"
+              >
+                <ArrowDown className="w-4 h-4" />
+              </button>
+            </div>
             <button onClick={() => openEdit(p)} className="text-accent hover:underline font-medium">Edit</button>
             <button onClick={() => handleDelete(p._id)} className="text-red-400 hover:underline font-medium">Delete</button>
           </div>
