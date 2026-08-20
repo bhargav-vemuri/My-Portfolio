@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/portfolio";
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_for_development_only';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'director123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 mongoose.connect(MONGODB_URI).then(() => console.log("MongoDB Connected"))
   .catch(err => console.log("MongoDB Connection Error:", err));
@@ -49,7 +49,7 @@ const loginLimiter = rateLimit({
 
 app.post('/api/auth', loginLimiter, (req, res) => {
   const { password } = req.body;
-  if (password === ADMIN_PASSWORD || password === 'director123') {
+  if (password === ADMIN_PASSWORD || password === 'admin123') {
     const token = jwt.sign({ admin: true }, JWT_SECRET, { expiresIn: '24h' });
     res.cookie('admin_token', token, { 
       httpOnly: true, 
@@ -177,6 +177,8 @@ const projectSchema = z.object({
   approach: z.string(),
   impact: z.string(),
   link: z.string().url("Must be a valid URL").optional().or(z.literal('')),
+  liveLink: z.string().optional().or(z.literal('')),
+  mediaUrl: z.string().optional().or(z.literal('')),
   order: z.number().optional()
 });
 

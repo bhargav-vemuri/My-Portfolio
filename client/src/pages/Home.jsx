@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Hero } from '../components/Hero';
-import { Act1About } from '../components/Act1About';
-import { Act2Projects } from '../components/Act2Projects';
-import { Act3Experience } from '../components/Act3Experience';
-import { Act4Education } from '../components/Act4Education';
-import { Act5Skills } from '../components/Act5Skills';
+import { About } from "../components/About";
+import { Projects } from "../components/Projects";
+import { Experience } from "../components/Experience";
+import { Education } from "../components/Education";
+import { Skills } from "../components/Skills";
 import { EndCredits } from '../components/EndCredits';
+import { ParticlesBackground } from '../components/ParticlesBackground';
 
 const API_URL = "https://my-portfolio-ek2r.onrender.com";
+
+const loadingPhrases = [
+  "Initializing",
+  "Hey! Thanks for visiting",
+  "Waking up the server...",
+  "Taking a minute, hold tight",
+  "Gathering assets...",
+  "Almost there..."
+];
 
 export default function Home() {
   const [projects, setProjects] = useState([]);
@@ -16,6 +26,17 @@ export default function Home() {
   const [education, setEducation] = useState([]);
   const [skills, setSkills] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [phraseIndex, setPhraseIndex] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (isInitialLoad) {
+      interval = setInterval(() => {
+        setPhraseIndex((prev) => (prev + 1) % loadingPhrases.length);
+      }, 2500);
+    }
+    return () => clearInterval(interval);
+  }, [isInitialLoad]);
 
   useEffect(() => {
     Promise.all([
@@ -43,24 +64,49 @@ export default function Home() {
         {isInitialLoad && (
           <motion.div 
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, filter: "blur(10px)" }}
+            exit={{ opacity: 0, filter: "blur(10px)", scale: 1.1 }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
             className="fixed inset-0 z-[200] bg-background flex flex-col items-center justify-center text-foreground"
           >
-            <div className="w-16 h-16 border-4 border-muted/20 border-t-white rounded-full animate-spin mb-8 shadow-[0_0_15px_rgba(255,255,255,0.2)]" />
-            <h1 className="font-serif text-3xl md:text-5xl tracking-[0.2em] animate-pulse">DIRECTOR'S CUT</h1>
-            <p className="mt-4 font-mono text-sm tracking-widest text-muted uppercase">Loading Assets...</p>
+            <motion.div 
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+              className="w-48 h-[2px] bg-white/10 overflow-hidden mb-8 rounded-full"
+            >
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: "100%" }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                className="w-full h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400"
+              />
+            </motion.div>
+            <div className="h-8 w-full relative flex items-center justify-center overflow-visible">
+              <AnimatePresence mode="wait">
+                <motion.h1 
+                  key={phraseIndex}
+                  initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+                  transition={{ duration: 0.4 }}
+                  className="font-sans text-xs md:text-sm tracking-[0.3em] text-cyan-200 uppercase font-medium absolute whitespace-nowrap drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+                >
+                  {loadingPhrases[phraseIndex]}
+                </motion.h1>
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <main className="flex min-h-screen flex-col items-center justify-between w-full">
+      <main className="flex min-h-screen flex-col items-center justify-between w-full relative">
+      <ParticlesBackground />
       <Hero />
-      <Act1About />
-      <Act2Projects projects={projects} />
-      <Act3Experience experience={experience} />
-      <Act4Education education={education} />
-      <Act5Skills skills={skills.map(s => s.name)} />
+      <About />
+      <Projects projects={projects} />
+      <Experience experience={experience} />
+      <Education education={education} />
+      <Skills skills={skills} />
       <EndCredits />
     </main>
     </>

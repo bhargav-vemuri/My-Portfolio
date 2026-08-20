@@ -59,8 +59,8 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-12 border-b border-muted/20 pb-8">
           <div>
-            <h1 className="text-4xl font-serif">Director's Dashboard</h1>
-            <p className="text-muted mt-2 text-lg">Manage your cinematic portfolio content instantly.</p>
+            <h1 className="text-4xl font-serif">Admin Dashboard</h1>
+            <p className="text-muted mt-2 text-lg">Manage your portfolio content instantly.</p>
           </div>
           <div className="flex gap-4">
             <button onClick={async () => { await apiFetch('/api/logout', { method: 'POST' }); navigate('/admin/login'); }} className="px-6 py-3 bg-[#0f172a] text-muted rounded-full font-bold uppercase tracking-widest text-sm hover:text-foreground transition-colors">
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
 
 function ProjectsTab({ data, refresh }) {
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ title: "", year: "", problem: "", approach: "", impact: "", link: "" });
+  const [formData, setFormData] = useState({ title: "", year: "", problem: "", approach: "", impact: "", link: "", liveLink: "", mediaUrl: "" });
 
   const handleSave = async () => {
     if (editingId === "new") {
@@ -118,12 +118,12 @@ function ProjectsTab({ data, refresh }) {
 
   const openEdit = (p) => {
     setEditingId(p._id);
-    setFormData({ title: p.title, year: p.year, problem: p.problem, approach: p.approach, impact: p.impact, link: p.link });
+    setFormData({ title: p.title, year: p.year, problem: p.problem, approach: p.approach, impact: p.impact, link: p.link, liveLink: p.liveLink || "", mediaUrl: p.mediaUrl || "" });
   };
 
   const openNew = () => {
     setEditingId("new");
-    setFormData({ title: "", year: "", problem: "", approach: "", impact: "", link: "" });
+    setFormData({ title: "", year: "", problem: "", approach: "", impact: "", link: "", liveLink: "", mediaUrl: "" });
   };
 
   const handleMove = async (index, direction) => {
@@ -165,8 +165,10 @@ function ProjectsTab({ data, refresh }) {
       <textarea className="bg-background/50 border border-muted/30 p-3 rounded h-24 focus:border-accent outline-none" placeholder="Approach" value={formData.approach} onChange={e => setFormData({...formData, approach: e.target.value})} />
       <textarea className="bg-background/50 border border-muted/30 p-3 rounded h-24 focus:border-accent outline-none" placeholder="Impact" value={formData.impact} onChange={e => setFormData({...formData, impact: e.target.value})} />
       <input className="bg-background/50 border border-muted/30 p-3 rounded focus:border-accent outline-none" placeholder="GitHub Link" value={formData.link} onChange={e => setFormData({...formData, link: e.target.value})} />
+      <input className="bg-background/50 border border-muted/30 p-3 rounded focus:border-accent outline-none" placeholder="Live Site Link (Optional)" value={formData.liveLink} onChange={e => setFormData({...formData, liveLink: e.target.value})} />
+      <input className="bg-background/50 border border-muted/30 p-3 rounded focus:border-accent outline-none" placeholder="Media/GIF URL (Optional)" value={formData.mediaUrl} onChange={e => setFormData({...formData, mediaUrl: e.target.value})} />
       <div className="flex gap-4 mt-4">
-        <button onClick={handleSave} className="bg-accent text-background px-6 py-2 rounded font-bold uppercase tracking-wider">Save Scene</button>
+        <button onClick={handleSave} className="bg-accent text-background px-6 py-2 rounded font-bold uppercase tracking-wider">Save Project</button>
         <button onClick={() => setEditingId(null)} className="bg-muted/20 px-6 py-2 rounded font-bold uppercase tracking-wider hover:bg-muted/30">Cancel</button>
       </div>
     </div>
@@ -333,10 +335,11 @@ function EducationTab({ data, refresh }) {
 
 function SkillsTab({ data, refresh }) {
   const [newSkill, setNewSkill] = useState("");
+  const [newCategory, setNewCategory] = useState("General");
 
   const handleAdd = async () => {
     if(!newSkill) return;
-    await apiFetch('/api/skills', { method: 'POST', body: JSON.stringify({ name: newSkill }) });
+    await apiFetch('/api/skills', { method: 'POST', body: JSON.stringify({ name: newSkill, category: newCategory || "General" }) });
     setNewSkill("");
     refresh();
   };
@@ -346,12 +349,40 @@ function SkillsTab({ data, refresh }) {
     refresh();
   };
 
+  // Fallback categorization for existing skills that don't have a category in the DB
+  const getCategoryForSkill = (skillName, currentCategory) => {
+    if (currentCategory && currentCategory !== "General") return currentCategory;
+    
+    const name = (skillName || "").toLowerCase();
+    if (["java", "python", "javascript", "typescript", "c++"].includes(name)) return "Languages";
+    if (["react", "node.js", "spring boot", "express", "next.js", "tailwindcss"].includes(name)) return "Frameworks & Libraries";
+    if (["mongodb", "postgresql", "redis", "mysql", "neo4j"].includes(name)) return "Databases";
+    if (["llms", "rag", "vector embeddings", "semantic search", "langchain", "openai"].includes(name)) return "AI & ML";
+    if (["git", "docker", "aws", "gcp", "azure", "linux", "celery"].includes(name)) return "DevOps & Tools";
+    
+    return "General"; // Admin dashboard fallback
+  };
+
+  // Group skills by category
+  const skillsByCategory = data.reduce((acc, skill) => {
+    const cat = getCategoryForSkill(skill.name, skill.category);
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(skill);
+    return acc;
+  }, {});
+
   return (
     <div className="flex flex-col gap-8 bg-[#0f172a]/20 p-8 rounded-xl border border-muted/10 shadow-xl">
       <div className="flex gap-4">
         <input 
+          className="bg-background/50 border border-muted/30 p-3 rounded w-1/3 focus:border-accent outline-none" 
+          placeholder="Category (e.g. Databases)" 
+          value={newCategory} 
+          onChange={e => setNewCategory(e.target.value)} 
+        />
+        <input 
           className="bg-background/50 border border-muted/30 p-3 rounded flex-1 focus:border-accent outline-none" 
-          placeholder="Add a new skill (e.g. Node.js)" 
+          placeholder="Add a new skill (e.g. PostgreSQL)" 
           value={newSkill} 
           onChange={e => setNewSkill(e.target.value)} 
           onKeyDown={e => e.key === 'Enter' && handleAdd()}
@@ -359,11 +390,18 @@ function SkillsTab({ data, refresh }) {
         <button onClick={handleAdd} className="bg-accent text-background px-8 py-2 rounded font-bold uppercase tracking-wider hover:bg-accent/80">Add</button>
       </div>
       
-      <div className="flex flex-wrap gap-4 mt-4">
-        {data.map(s => (
-          <div key={s._id} className="px-5 py-2 border border-muted/30 rounded-full flex items-center gap-4 bg-background/50 shadow-sm">
-            <span className="font-medium">{s.name}</span>
-            <button onClick={() => handleDelete(s._id)} className="text-red-400 hover:text-red-300 font-bold text-lg leading-none hover:scale-110 transition-transform">×</button>
+      <div className="flex flex-col gap-6 mt-4">
+        {Object.entries(skillsByCategory).map(([category, skills]) => (
+          <div key={category} className="mb-4">
+            <h3 className="text-xl font-serif text-accent mb-3 border-b border-muted/20 pb-2">{category}</h3>
+            <div className="flex flex-wrap gap-4">
+              {skills.map(s => (
+                <div key={s._id} className="px-5 py-2 border border-muted/30 rounded-full flex items-center gap-4 bg-background/50 shadow-sm hover:border-accent/50 transition-colors">
+                  <span className="font-medium">{s.name}</span>
+                  <button onClick={() => handleDelete(s._id)} className="text-red-400 hover:text-red-300 font-bold text-lg leading-none hover:scale-110 transition-transform">×</button>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

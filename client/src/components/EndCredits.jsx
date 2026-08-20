@@ -1,26 +1,31 @@
-
 import { motion } from "framer-motion";
 
 export function EndCredits() {
   return (
-    <section className="relative min-h-[50vh] w-full flex flex-col items-center justify-center overflow-hidden border-t border-muted/10 pb-24">
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none z-0" />
-      
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className="text-center z-10 px-4 mb-16"
-      >
-        <p className="text-muted font-mono text-sm tracking-[0.2em] uppercase mb-8">End Credits</p>
-        <h2 className="font-serif text-3xl md:text-5xl text-foreground mb-6">Great systems aren&apos;t just designed.</h2>
-        <h2 className="font-serif text-4xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-400 pb-2">They&apos;re built. Let&apos;s build the next one.</h2>
-      </motion.div>
+    <section className="relative w-full py-16 border-t border-white/10 bg-background/50 backdrop-blur-sm overflow-hidden flex flex-col items-center justify-center">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 w-full flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+        
+        <div className="flex items-center gap-4">
+          <p className="text-slate-400 font-mono text-sm">
+            © {new Date().getFullYear()} VSS Bhargav. All rights reserved.
+          </p>
+          <a href="/admin/login" className="text-slate-500 hover:text-cyan-400 transition-colors opacity-70 hover:opacity-100 text-xs font-mono">
+            [Admin Access]
+          </a>
+        </div>
 
-      <div className="absolute bottom-8 left-0 w-full text-center text-muted/50 text-sm font-mono z-10 flex flex-col items-center gap-2">
-        <p>© {new Date().getFullYear()} — Directed by Vemuri Sethu Sai Bhargav</p>
-        <a href="/admin/login" className="hover:text-accent transition-colors opacity-50 hover:opacity-100 text-xs">Admin Access</a>
+        <div className="flex items-center gap-6">
+          <a href="https://github.com/bhargav-vemuri" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-cyan-400 transition-colors font-mono text-sm uppercase tracking-widest">
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/vssbhargav" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-emerald-400 transition-colors font-mono text-sm uppercase tracking-widest">
+            LinkedIn
+          </a>
+          <a href="mailto:bhargavvemuri79@gmail.com" className="text-slate-400 hover:text-blue-400 transition-colors font-mono text-sm uppercase tracking-widest">
+            Email
+          </a>
+        </div>
+
       </div>
     </section>
   );

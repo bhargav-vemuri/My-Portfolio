@@ -7,6 +7,8 @@ const ProjectSchema = new mongoose.Schema({
   approach: { type: String, required: true },
   impact: { type: String, required: true },
   link: { type: String, required: true },
+  liveLink: { type: String, default: "" },
+  mediaUrl: { type: String, default: "" },
   order: { type: Number, default: 0 }
 }, { timestamps: true });
 
@@ -25,7 +27,8 @@ const EducationSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const SkillSchema = new mongoose.Schema({
-  name: { type: String, required: true }
+  name: { type: String, required: true },
+  category: { type: String, default: "General" }
 }, { timestamps: true });
 
 module.exports = {
