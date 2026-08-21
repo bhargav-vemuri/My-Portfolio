@@ -43,23 +43,29 @@ export function Hero() {
           </motion.p>
         </div>
 
-        <div className="flex flex-col items-center gap-1 md:gap-4 font-sans font-bold text-5xl md:text-7xl lg:text-8xl tracking-tight text-white leading-[1.1] drop-shadow-2xl">
-          <div className="overflow-hidden py-2">
-            <motion.h1 variants={item}>
-              Engineering
-            </motion.h1>
-          </div>
-          <div className="overflow-hidden py-2">
-            <motion.h1 variants={item} className="flex items-center justify-center">
-              <span className="italic font-serif font-light text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400 pr-3 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">intelligent</span>
-              systems.
-            </motion.h1>
-          </div>
-        </div>
-        
-        <div className="overflow-hidden mt-8 max-w-2xl">
-          <motion.p variants={item} className="text-slate-300 text-base md:text-lg lg:text-xl font-light">
-            I build scalable distributed backend services and high-performance applications designed for impact.
+        <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-5xl">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold font-sans tracking-tight text-white flex flex-col items-center gap-2 drop-shadow-xl w-full text-center"
+          >
+            <span className="relative">Engineering</span>
+            <span className="flex flex-col md:flex-row items-baseline gap-4 md:gap-6 pb-2">
+              <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 lowercase pr-2 py-2 translate-y-1 md:translate-y-2">
+                intelligent
+              </span>
+              <span className="relative py-2">systems.</span>
+            </span>
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
+            className="text-lg md:text-xl text-slate-300 font-medium tracking-wide max-w-2xl text-center mt-6 drop-shadow-md px-4"
+          >
+            I architect scalable distributed systems, intelligent applications, and high-performance digital experiences designed for impact.
           </motion.p>
         </div>
 

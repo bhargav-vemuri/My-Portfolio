@@ -6,8 +6,10 @@ import { Projects } from "../components/Projects";
 import { Experience } from "../components/Experience";
 import { Education } from "../components/Education";
 import { Skills } from "../components/Skills";
-import { EndCredits } from '../components/EndCredits';
+import { Footer } from '../components/Footer';
 import { ParticlesBackground } from '../components/ParticlesBackground';
+import { Navbar } from '../components/Navbar';
+import { ScrollProgress } from '../components/ScrollProgress';
 
 const API_URL = "https://my-portfolio-ek2r.onrender.com";
 
@@ -17,6 +19,8 @@ const loadingPhrases = [
   "Waking up the server...",
   "Taking a minute, hold tight",
   "Gathering assets...",
+  "Compiling dependencies...",
+  "Preparing the experience...",
   "Almost there..."
 ];
 
@@ -25,6 +29,7 @@ export default function Home() {
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [settings, setSettings] = useState({});
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [phraseIndex, setPhraseIndex] = useState(0);
 
@@ -33,7 +38,7 @@ export default function Home() {
     if (isInitialLoad) {
       interval = setInterval(() => {
         setPhraseIndex((prev) => (prev + 1) % loadingPhrases.length);
-      }, 2500);
+      }, 4500);
     }
     return () => clearInterval(interval);
   }, [isInitialLoad]);
@@ -43,13 +48,15 @@ export default function Home() {
       fetch(`${API_URL}/api/projects`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${API_URL}/api/experience`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${API_URL}/api/education`, { credentials: 'include' }).then(r => r.json()),
-      fetch(`${API_URL}/api/skills`, { credentials: 'include' }).then(r => r.json())
-    ]).then(([p, e, ed, s]) => {
+      fetch(`${API_URL}/api/skills`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/settings`, { credentials: 'include' }).then(r => r.ok ? r.json() : { resumeUrl: "" }).catch(() => ({ resumeUrl: "" }))
+    ]).then(([p, e, ed, s, setRes]) => {
       // Provide fallback empty arrays if backend is disconnected
       setProjects(Array.isArray(p) ? p : []);
       setExperience(Array.isArray(e) ? e : []);
       setEducation(Array.isArray(ed) ? ed : []);
       setSkills(Array.isArray(s) ? s : []);
+      setSettings(setRes || { resumeUrl: "" });
       
       setTimeout(() => setIsInitialLoad(false), 1200);
     }).catch(err => {
@@ -99,15 +106,17 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      <ScrollProgress />
+      <Navbar />
       <main className="flex min-h-screen flex-col items-center justify-between w-full relative">
       <ParticlesBackground />
       <Hero />
-      <About />
+      <About resumeUrl={settings.resumeUrl} />
       <Projects projects={projects} />
       <Experience experience={experience} />
       <Education education={education} />
       <Skills skills={skills} />
-      <EndCredits />
+      <Footer />
     </main>
     </>
   );

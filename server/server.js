@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const { z } = require('zod');
 
-const { Project, Experience, Education, Skill } = require('./models');
+const { Project, Experience, Education, Skill, Settings } = require('./models');
 
 const app = express();
 
@@ -78,6 +78,9 @@ app.get('/api/seed', async (req, res) => {
     await Experience.deleteMany({});
     await Education.deleteMany({});
     await Skill.deleteMany({});
+    await Settings.deleteMany({});
+
+    await Settings.create({ resumeUrl: "/uploads/resume.pdf" });
 
     const projects = [
       {
@@ -200,6 +203,10 @@ const skillSchema = z.object({
   name: z.string().min(1, "Skill name is required")
 });
 
+const settingsSchema = z.object({
+  resumeUrl: z.string().optional()
+});
+
 const validateSchema = (schema) => (req, res, next) => {
   try {
     schema.parse(req.body);
@@ -283,5 +290,32 @@ buildCrudRoutes(Experience, 'experience');
 buildCrudRoutes(Education, 'education');
 buildCrudRoutes(Skill, 'skills');
 
+// Settings Routes
+app.get('/api/settings', async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({ resumeUrl: "" });
+    }
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/settings', requireAdmin, validateSchema(settingsSchema), async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = new Settings(req.body);
+    } else {
+      Object.assign(settings, req.body);
+    }
+    const updated = await settings.save();
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

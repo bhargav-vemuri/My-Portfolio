@@ -17,24 +17,26 @@ const apiFetch = async (url, options = {}) => {
 };
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState("projects");
-  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [] });
+  const [activeTab, setActiveTab] = useState("settings");
+  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [], settings: {} });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchAllData = async () => {
     try {
-      const [p, e, ed, s] = await Promise.all([
+      const [p, e, ed, s, setRes] = await Promise.all([
         apiFetch('/api/projects').then(r => r.json()),
         apiFetch('/api/experience').then(r => r.json()),
         apiFetch('/api/education').then(r => r.json()),
-        apiFetch('/api/skills').then(r => r.json())
+        apiFetch('/api/skills').then(r => r.json()),
+        apiFetch('/api/settings').then(r => r.ok ? r.json() : { resumeUrl: "" }).catch(() => ({ resumeUrl: "" }))
       ]);
       setData({
         projects: Array.isArray(p) ? p : [],
         experience: Array.isArray(e) ? e : [],
         education: Array.isArray(ed) ? ed : [],
-        skills: Array.isArray(s) ? s : []
+        skills: Array.isArray(s) ? s : [],
+        settings: setRes || { resumeUrl: "" }
       });
     } catch(err) {
       console.error(err);
@@ -74,7 +76,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-4 mb-8">
-          {["projects", "experience", "education", "skills"].map(tab => (
+          {["settings", "projects", "experience", "education", "skills"].map(tab => (
             <button 
               key={tab} 
               onClick={() => setActiveTab(tab)}
@@ -86,6 +88,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Content */}
+        {activeTab === "settings" && <SettingsTab data={data.settings} refresh={fetchAllData} />}
         {activeTab === "projects" && <ProjectsTab data={data.projects} refresh={fetchAllData} />}
         {activeTab === "experience" && <ExperienceTab data={data.experience} refresh={fetchAllData} />}
         {activeTab === "education" && <EducationTab data={data.education} refresh={fetchAllData} />}
@@ -349,23 +352,9 @@ function SkillsTab({ data, refresh }) {
     refresh();
   };
 
-  // Fallback categorization for existing skills that don't have a category in the DB
-  const getCategoryForSkill = (skillName, currentCategory) => {
-    if (currentCategory && currentCategory !== "General") return currentCategory;
-    
-    const name = (skillName || "").toLowerCase();
-    if (["java", "python", "javascript", "typescript", "c++"].includes(name)) return "Languages";
-    if (["react", "node.js", "spring boot", "express", "next.js", "tailwindcss"].includes(name)) return "Frameworks & Libraries";
-    if (["mongodb", "postgresql", "redis", "mysql", "neo4j"].includes(name)) return "Databases";
-    if (["llms", "rag", "vector embeddings", "semantic search", "langchain", "openai"].includes(name)) return "AI & ML";
-    if (["git", "docker", "aws", "gcp", "azure", "linux", "celery"].includes(name)) return "DevOps & Tools";
-    
-    return "General"; // Admin dashboard fallback
-  };
-
   // Group skills by category
   const skillsByCategory = data.reduce((acc, skill) => {
-    const cat = getCategoryForSkill(skill.name, skill.category);
+    const cat = skill.category && skill.category.trim() !== "" ? skill.category : "General";
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(skill);
     return acc;
@@ -404,6 +393,50 @@ function SkillsTab({ data, refresh }) {
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function SettingsTab({ data, refresh }) {
+  const [formData, setFormData] = useState({ resumeUrl: data?.resumeUrl || "" });
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setFormData({ resumeUrl: data?.resumeUrl || "" });
+  }, [data]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await apiFetch('/api/settings', { method: 'PUT', body: JSON.stringify(formData) });
+    setSaving(false);
+    refresh();
+  };
+
+  return (
+    <div className="bg-[#0f172a]/80 p-8 rounded-3xl border border-muted/20 shadow-xl">
+      <h2 className="text-2xl font-serif mb-6 text-accent">General Settings</h2>
+      <div className="flex flex-col gap-4 max-w-xl">
+        <label className="flex flex-col gap-2">
+          <span className="text-muted font-medium">Resume File Path / URL</span>
+          <input 
+            type="text" 
+            placeholder="/uploads/resume.pdf"
+            className="p-4 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none font-mono text-sm" 
+            value={formData.resumeUrl} 
+            onChange={e => setFormData({ ...formData, resumeUrl: e.target.value })} 
+          />
+          <p className="text-xs text-muted/80 mt-1">
+            Drag and drop your PDF into the <code>client/public/uploads</code> folder and reference it here (e.g. <code>/uploads/resume.pdf</code>).
+          </p>
+        </label>
+        <button 
+          onClick={handleSave} 
+          disabled={saving}
+          className="mt-4 px-6 py-3 bg-accent text-background rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-accent/80 transition-colors w-fit disabled:opacity-50"
+        >
+          {saving ? "Saving..." : "Save Settings"}
+        </button>
       </div>
     </div>
   );

@@ -31,9 +31,14 @@ const SkillSchema = new mongoose.Schema({
   category: { type: String, default: "General" }
 }, { timestamps: true });
 
+const SettingsSchema = new mongoose.Schema({
+  resumeUrl: { type: String, default: "" }
+}, { timestamps: true });
+
 module.exports = {
   Project: mongoose.model('Project', ProjectSchema),
   Experience: mongoose.model('Experience', ExperienceSchema),
   Education: mongoose.model('Education', EducationSchema),
-  Skill: mongoose.model('Skill', SkillSchema)
+  Skill: mongoose.model('Skill', SkillSchema),
+  Settings: mongoose.model('Settings', SettingsSchema)
 };

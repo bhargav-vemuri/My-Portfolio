@@ -6,16 +6,12 @@ export function ParticlesBackground() {
   const options = useMemo(() => ({
     background: { color: { value: "transparent" } },
     fpsLimit: 120,
-    interactivity: {
-      events: { onHover: { enable: true, mode: "grab" } },
-      modes: { grab: { distance: 150, links: { opacity: 0.2 } } },
-    },
     particles: {
       color: { value: "#0ea5e9" }, // cyan accent
-      links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.05, width: 1 },
-      move: { direction: "none", enable: true, outModes: { default: "bounce" }, random: false, speed: 0.5, straight: false },
-      number: { density: { enable: true, area: 800 }, value: 40 },
-      opacity: { value: 0.1 },
+      links: { color: "#ffffff", distance: 180, enable: true, opacity: 0.1, width: 1 },
+      move: { direction: "none", enable: true, outModes: { default: "out" }, random: true, speed: 0.8, straight: false },
+      number: { density: { enable: true, area: 800 }, value: 60 },
+      opacity: { value: 0.3, animation: { enable: true, speed: 0.5, minimumValue: 0.1 } },
       shape: { type: "circle" },
       size: { value: { min: 1, max: 3 } },
     },

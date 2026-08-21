@@ -17,8 +17,8 @@
   --color-surface: var(--surface);
   --color-border: var(--border);
   --font-sans: 'Inter', system-ui, sans-serif;
-  --font-serif: 'Playfair Display', serif;
-  --font-mono: 'Fira Code', monospace;
+  --font-serif: 'Instrument Serif', serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 body {
