@@ -65,23 +65,6 @@ export function About({ resumeUrl }) {
                 <p className="text-lg md:text-xl text-slate-300 leading-relaxed font-normal tracking-wide">
                   I thrive on turning ambitious ideas into robust, production-ready software—whether that means architecting event-driven microservices, developing AI-powered workflows, or crafting intuitive user experiences. My mission is to engineer products that solve meaningful problems while maintaining uncompromising standards of scalability, reliability, and elegant design.
                 </p>
-                {/* Resume Download */}
-                {resumeUrl && (
-                  <div className="mt-8 flex">
-                    <Magnetic>
-                      <a 
-                        href={resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-3 px-8 py-4 bg-white text-black rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
-                      >
-                        <Download className="w-5 h-5" />
-                        <span>Download Resume</span>
-                      </a>
-                    </Magnetic>
-                  </div>
-                )}
-                
                 {/* Mobile Contact Info (Hidden on Desktop) */}
                 <div className="flex md:hidden flex-col gap-4 border-t border-white/10 pt-8 mt-8">
                   <a 
@@ -126,6 +109,20 @@ export function About({ resumeUrl }) {
                   </div>
                 </a>
               </Magnetic>
+              
+              {/* Resume Download */}
+              {resumeUrl && (
+                <a 
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download="VSS_Bhargav_Resume.pdf"
+                  className="flex items-center justify-center gap-3 w-full py-5 bg-white text-black rounded-2xl font-bold uppercase tracking-widest text-sm hover:scale-[1.02] transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Download Resume</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
