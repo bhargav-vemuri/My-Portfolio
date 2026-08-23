@@ -7,7 +7,7 @@ import { Experience } from "../components/Experience";
 import { Education } from "../components/Education";
 import { Skills } from "../components/Skills";
 import { Footer } from '../components/Footer';
-import { ParticlesBackground } from '../components/ParticlesBackground';
+import { AmbientBackground } from '../components/AmbientBackground';
 import { Navbar } from '../components/Navbar';
 import { ScrollProgress } from '../components/ScrollProgress';
 
@@ -85,10 +85,12 @@ export default function Home() {
                 initial={{ x: "-100%" }}
                 animate={{ x: "100%" }}
                 transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                className="w-full h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400"
+                className="w-full h-full bg-gradient-to-r from-terra via-slate-blue to-sage"
               />
             </motion.div>
-            <div className="h-8 w-full relative flex items-center justify-center overflow-visible">
+            
+            {/* Minimalist Progress Number with Premium Glow */}
+            <div className="relative h-6 w-full flex items-center justify-center mt-6">
               <AnimatePresence mode="wait">
                 <motion.h1 
                   key={phraseIndex}
@@ -96,7 +98,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
                   transition={{ duration: 0.4 }}
-                  className="font-sans text-xs md:text-sm tracking-[0.3em] text-cyan-200 uppercase font-medium absolute whitespace-nowrap drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+                  className="font-sans text-xs md:text-sm tracking-[0.3em] text-terra uppercase font-medium absolute whitespace-nowrap drop-shadow-[0_0_10px_rgba(217,125,85,0.8)]"
                 >
                   {loadingPhrases[phraseIndex]}
                 </motion.h1>
@@ -109,7 +111,7 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
       <main className="flex min-h-screen flex-col items-center justify-between w-full relative">
-      <ParticlesBackground />
+      <AmbientBackground />
       <Hero />
       <About resumeUrl={settings.resumeUrl} />
       <Projects projects={projects} />

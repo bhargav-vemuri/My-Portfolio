@@ -2,42 +2,24 @@ import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Hero() {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
+  const y1 = useTransform(scrollY, [0, 1000], [0, 300]);
   const opacity = useTransform(scrollY, [0, 500], [1, 0]);
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.8,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { y: "100%", opacity: 0 },
-    show: { 
-      y: 0, 
-      opacity: 1,
-      transition: { duration: 1, ease: [0.22, 1, 0.36, 1] } 
-    },
-  };
 
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
       <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        style={{ y: y1, opacity }}
-        className="text-center z-10 px-4 flex flex-col items-center"
+        style={{ 
+          y: y1, 
+          opacity,
+        }}
+        className="text-center z-10 px-4 flex flex-col items-center mt-16 md:mt-24"
       >
         <div className="overflow-hidden mb-8">
           <motion.p
-            variants={item}
-            className="text-cyan-400 tracking-[0.3em] uppercase text-xs md:text-sm font-medium font-mono drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="text-terra tracking-[0.4em] uppercase text-xs md:text-sm font-medium font-mono"
           >
             Vemuri Sethu Sai Bhargav
           </motion.p>
@@ -45,50 +27,51 @@ export function Hero() {
 
         <div className="flex flex-col items-center gap-4 relative z-10 w-full max-w-5xl">
           <motion.h1 
-            initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold font-sans tracking-tight text-white flex flex-col items-center gap-2 drop-shadow-xl w-full text-center"
+            initial={{ opacity: 0, scale: 0.95, filter: "blur(12px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            className="text-6xl sm:text-7xl md:text-8xl lg:text-[10rem] font-bold font-sans tracking-tighter text-cream flex flex-col items-center gap-3 md:gap-5 leading-[0.9] drop-shadow-2xl"
           >
-            <span className="relative">Engineering</span>
-            <span className="flex flex-col md:flex-row items-baseline gap-4 md:gap-6 pb-2">
-              <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 lowercase pr-2 py-2 translate-y-1 md:translate-y-2">
+            <span className="relative z-10">Engineering</span>
+            <span className="flex flex-col md:flex-row items-baseline gap-4 md:gap-6">
+              <span className="italic font-serif text-transparent bg-clip-text bg-gradient-to-br from-cream via-terra to-sage lowercase pr-2 pb-6 -mb-6">
                 intelligent
               </span>
-              <span className="relative py-2">systems.</span>
+              <span className="relative z-20">systems.</span>
             </span>
           </motion.h1>
 
           <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut", delay: 0.6 }}
-            className="text-lg md:text-xl text-slate-300 font-medium tracking-wide max-w-2xl text-center mt-6 drop-shadow-md px-4"
+            initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
+            className="text-cream/70 font-medium tracking-wide max-w-2xl text-center mt-12 px-4 text-lg md:text-xl leading-relaxed md:leading-[1.7]"
           >
             I architect scalable distributed systems, intelligent applications, and high-performance digital experiences designed for impact.
           </motion.p>
         </div>
 
-        <div className="overflow-hidden mt-20">
-          <motion.div variants={item}>
-            <motion.a 
-              href="#about"
-              whileHover={{ y: 5 }}
-              transition={{ duration: 0.3, type: "spring" }}
-              className="group flex flex-col items-center gap-4 text-white/50 hover:text-cyan-400 transition-colors"
-            >
-              <span className="text-xs uppercase tracking-widest font-mono font-medium">Explore Work</span>
-              <div className="w-[2px] h-16 bg-white/10 group-hover:bg-cyan-400/30 transition-colors relative overflow-hidden rounded-full">
-                <motion.div 
-                  initial={{ y: "-100%" }}
-                  animate={{ y: "100%" }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-                  className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400 to-transparent"
-                />
-              </div>
-            </motion.a>
-          </motion.div>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, delay: 1.5 }}
+          className="mt-24"
+        >
+          <a 
+            href="#about"
+            className="group flex flex-col items-center gap-4 text-cream/40 hover:text-terra transition-colors"
+          >
+            <span className="text-[10px] uppercase tracking-[0.3em] font-mono font-medium">Scroll to explore</span>
+            <div className="w-[1px] h-20 bg-cream/10 group-hover:bg-terra/30 transition-colors relative overflow-hidden">
+              <motion.div 
+                initial={{ y: "-100%" }}
+                animate={{ y: "100%" }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                className="absolute inset-0 bg-gradient-to-b from-transparent via-terra to-transparent"
+              />
+            </div>
+          </a>
+        </motion.div>
       </motion.div>
 
       {/* Subtle bottom gradient to blend into next section */}

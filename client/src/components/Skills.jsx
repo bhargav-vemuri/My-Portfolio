@@ -15,12 +15,12 @@ export function Skills({ skills = [] }) {
   }, {});
 
   return (
-    <section id="skills" ref={containerRef} className="relative w-full flex flex-col items-center justify-center py-32 px-4 overflow-hidden border-t border-white/5 bg-transparent">
+    <section id="skills" ref={containerRef} className="relative w-full flex flex-col items-center justify-center py-32 px-4 overflow-hidden border-t border-cream/5 bg-transparent">
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 mb-16">
         <div className="flex flex-col items-center text-center pb-8">
-          <p className="text-emerald-400 tracking-[0.2em] uppercase text-xs font-mono font-semibold mb-4 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]">Toolkit</p>
-          <h2 className="font-sans font-bold text-4xl md:text-5xl tracking-tight text-white drop-shadow-lg">Skills & Technologies</h2>
+          <p className="text-sage tracking-[0.2em] uppercase text-xs font-mono font-semibold mb-4 drop-shadow-[0_0_10px_rgba(184,196,169,0.8)]">Toolkit</p>
+          <h2 className="font-sans font-bold text-4xl md:text-5xl tracking-tight text-cream drop-shadow-lg">Skills & Technologies</h2>
         </div>
       </div>
       
@@ -28,11 +28,11 @@ export function Skills({ skills = [] }) {
         {Object.entries(skillsByCategory).map(([category, catSkills], categoryIndex) => (
           <div key={category} className="flex flex-col items-center md:items-start text-center md:text-left">
             <motion.h3 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20, filter: "blur(12px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="text-cyan-400 font-mono text-sm tracking-[0.2em] uppercase font-semibold mb-6 border-b border-white/10 pb-2 inline-block px-4"
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              className="text-terra font-mono text-sm tracking-[0.2em] uppercase font-semibold mb-6 border-b border-cream/10 pb-2 inline-block px-4"
             >
               {category}
             </motion.h3>
@@ -43,7 +43,7 @@ export function Skills({ skills = [] }) {
               variants={{
                 visible: {
                   transition: {
-                    staggerChildren: 0.04,
+                    staggerChildren: 0.08,
                     delayChildren: categoryIndex * 0.1
                   }
                 }
@@ -54,15 +54,16 @@ export function Skills({ skills = [] }) {
                   <motion.div
                     key={skill}
                     variants={{
-                      hidden: { opacity: 0, y: 15 },
+                      hidden: { opacity: 0, y: 20, filter: "blur(12px)" },
                       visible: { 
                         opacity: 1, 
                         y: 0, 
-                        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } 
+                        filter: "blur(0px)",
+                        transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } 
                       }
                     }}
                     whileHover={{ scale: 1.05, y: -2 }}
-                    className="px-6 py-3 rounded-full border border-white/10 text-slate-300 bg-white/5 backdrop-blur-md shadow-[0_4px_15px_rgba(0,0,0,0.2)] cursor-default transition-all duration-300 hover:shadow-[0_0_20px_rgba(52,211,153,0.4)] hover:border-emerald-400/60 hover:text-white hover:bg-white/10 font-medium text-sm md:text-base font-sans"
+                    className="px-6 py-3 rounded-full border border-cream/10 text-cream/80 bg-cream/5 backdrop-blur-md shadow-[0_4px_15px_rgba(23,21,20,0.2)] cursor-default transition-all duration-300 hover:shadow-[0_0_25px_rgba(184,196,169,0.5)] hover:border-sage hover:text-sage hover:bg-sage/10 font-medium text-sm md:text-base font-sans"
                   >
                     <span>{skill}</span>
                   </motion.div>

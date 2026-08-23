@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617; /* Very dark slate */
-  --foreground: #f8fafc; /* Off-white */
-  --accent: #0ea5e9; /* Cyan-blue accent */
-  --muted: #94a3b8;
-  --surface: rgba(15, 23, 42, 0.4); /* Glass surface */
-  --border: rgba(255, 255, 255, 0.1);
+  --background: #171514; /* Dark Espresso */
+  --foreground: #F4E9D7; /* Warm Cream */
+  --accent: #D97D55; /* Terracotta */
+  --muted: #a3a3a3; /* Muted gray for slate text */
+  --surface: rgba(244, 233, 215, 0.05); /* Glass surface using Cream */
+  --border: rgba(244, 233, 215, 0.1);
 }
 
 @theme inline {
@@ -16,6 +16,13 @@
   --color-muted: var(--muted);
   --color-surface: var(--surface);
   --color-border: var(--border);
+  
+  /* Palette #4 custom colors */
+  --color-terra: #D97D55;
+  --color-cream: #F4E9D7;
+  --color-sage: #B8C4A9;
+  --color-slate-blue: #6FA4AF;
+  
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Instrument Serif', serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -31,46 +38,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Animated Aurora / Mesh Gradient Background */
-body::after {
-  content: "";
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: 
-    radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.15) 0%, transparent 40%), /* Cyan */
-    radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 40%), /* Emerald */
-    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 40%), /* Blue */
-    radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.12) 0%, transparent 40%); /* Teal */
-  background-size: 100% 100%;
-  animation: auroraMove 20s ease-in-out infinite alternate;
-  z-index: -1;
-  pointer-events: none;
-}
-
-@keyframes auroraMove {
-  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-  50% { transform: translate(-10%, 5%) scale(1.1) rotate(5deg); }
-  100% { transform: translate(5%, -10%) scale(1) rotate(-5deg); }
-}
-
-/* Film noise overlay */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 50;
-  opacity: 0.04;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -79,14 +46,15 @@ body::before {
   background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(244, 233, 215, 0.2);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(244, 233, 215, 0.4);
 }
 
 ::selection {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--background);
 }
+
