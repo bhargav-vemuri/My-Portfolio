@@ -41,13 +41,13 @@ export function Hero() {
             </span>
           </motion.h1>
 
-          <motion.p 
-            initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+          <motion.p
+            initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1], delay: 0.8 }}
-            className="text-cream/70 font-medium tracking-wide max-w-2xl text-center mt-12 px-4 text-lg md:text-xl leading-relaxed md:leading-[1.7]"
+            className="text-cream/80 font-medium tracking-[0.05em] md:tracking-[0.1em] max-w-3xl text-center mt-12 md:mt-16 px-4 text-xl md:text-2xl lg:text-3xl"
           >
-            I architect scalable distributed systems, intelligent applications, and high-performance digital experiences designed for impact.
+            Where thoughtful engineering meets practical AI.
           </motion.p>
         </div>
 

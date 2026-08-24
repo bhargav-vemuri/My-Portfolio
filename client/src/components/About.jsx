@@ -24,15 +24,26 @@ export function About({ resumeUrl }) {
         <div className="flex flex-col gap-10 md:gap-14">
           
           {/* Top Section: Title */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8">
             <div className="w-full lg:w-3/4">
               <Reveal delay={0.1}>
-                <p className="text-terra tracking-[0.2em] uppercase text-xs font-mono font-semibold mb-4 drop-shadow-[0_0_10px_rgba(217,125,85,0.8)]">About Me</p>
+                <div className="relative inline-block mb-6">
+                  <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-slate-blue drop-shadow-lg">
+                    About Me<span className="text-terra">.</span>
+                  </h2>
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    whileInView={{ width: "70%" }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+                    className="absolute -bottom-2 left-0 h-[3px] bg-gradient-to-r from-terra to-transparent rounded-full"
+                  />
+                </div>
               </Reveal>
               <Reveal delay={0.2}>
-                <h2 className="font-sans font-bold text-5xl md:text-6xl lg:text-7xl tracking-tight text-cream drop-shadow-lg leading-[1.15]">
+                <h3 className="font-sans font-bold text-4xl md:text-5xl lg:text-6xl tracking-tight text-cream drop-shadow-lg leading-[1.15]">
                   Software Engineer & <span className="text-transparent bg-clip-text bg-gradient-to-r from-terra to-sage inline-block py-2">AI Systems Developer.</span>
-                </h2>
+                </h3>
               </Reveal>
             </div>
             

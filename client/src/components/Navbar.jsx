@@ -15,12 +15,12 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
       className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 w-full max-w-fit"
     >
-      <div className="flex items-center justify-center gap-1 sm:gap-4 px-4 py-2 bg-cream/5 backdrop-blur-xl border border-cream/10 rounded-full shadow-[0_8px_32px_rgba(23,21,20,0.3)]">
+      <div className="flex items-center justify-center gap-1 sm:gap-4 px-4 py-2 bg-cream/5 backdrop-blur-2xl border border-cream/10 rounded-full shadow-[0_8px_32px_rgba(23,21,20,0.4)]">
         {links.map((link) => (
           <a
             key={link.name}
             href={link.href}
-            className="inline-block px-4 py-2 rounded-full text-xs sm:text-sm font-mono tracking-wide text-cream/80 hover:text-terra hover:bg-cream/5 transition-colors duration-300"
+            className="inline-block px-4 py-2 rounded-full text-xs sm:text-sm font-mono tracking-wide text-cream hover:text-terra hover:bg-cream/10 transition-colors duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
           >
             {link.name}
           </a>

@@ -18,9 +18,19 @@ export function Skills({ skills = [] }) {
     <section id="skills" ref={containerRef} className="relative w-full flex flex-col items-center justify-center py-32 px-4 overflow-hidden border-t border-cream/5 bg-transparent">
       
       <div className="max-w-7xl mx-auto px-4 md:px-8 w-full relative z-10 mb-16">
-        <div className="flex flex-col items-center text-center pb-8">
-          <p className="text-sage tracking-[0.2em] uppercase text-xs font-mono font-semibold mb-4 drop-shadow-[0_0_10px_rgba(184,196,169,0.8)]">Toolkit</p>
-          <h2 className="font-sans font-bold text-4xl md:text-5xl tracking-tight text-cream drop-shadow-lg">Skills & Technologies</h2>
+        <div className="flex flex-col items-center text-center pb-8 border-b border-cream/10 mb-8">
+          <div className="relative inline-block">
+            <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-cream drop-shadow-lg">
+              Skills & Technologies<span className="text-terra">.</span>
+            </h2>
+            <motion.div 
+              initial={{ width: 0, left: "50%", x: "-50%" }}
+              whileInView={{ width: "70%" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+              className="absolute -bottom-3 h-[3px] bg-gradient-to-r from-transparent via-terra to-transparent rounded-full"
+            />
+          </div>
         </div>
       </div>
       

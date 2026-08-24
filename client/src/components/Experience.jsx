@@ -6,8 +6,18 @@ export function Experience({ experience = [] }) {
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-cream/10 pb-8 mb-16">
           <div>
-            <p className="text-slate-blue tracking-[0.2em] uppercase text-xs font-mono font-semibold mb-4 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]">Experience</p>
-            <h2 className="font-sans font-bold text-4xl md:text-5xl tracking-tight text-cream drop-shadow-lg">Professional Journey</h2>
+            <div className="relative inline-block">
+              <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-cream drop-shadow-lg">
+                Experience<span className="text-slate-blue">.</span>
+              </h2>
+              <motion.div 
+                initial={{ width: 0 }}
+                whileInView={{ width: "70%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+                className="absolute -bottom-3 left-0 h-[3px] bg-gradient-to-r from-slate-blue to-transparent rounded-full"
+              />
+            </div>
           </div>
         </div>
         
