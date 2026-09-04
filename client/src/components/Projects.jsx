@@ -10,14 +10,14 @@ export function Projects({ projects = [] }) {
           <div>
             <div className="relative inline-block">
               <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-cream drop-shadow-lg">
-                Things I've Built<span className="text-terra">.</span>
+                Things I've Built<span className="text-sage">.</span>
               </h2>
               <motion.div 
                 initial={{ width: 0 }}
                 whileInView={{ width: "70%" }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-                className="absolute -bottom-3 left-0 h-[3px] bg-gradient-to-r from-terra to-transparent rounded-full"
+                className="absolute -bottom-3 left-0 h-[3px] bg-gradient-to-r from-sage to-transparent rounded-full"
               />
             </div>
           </div>

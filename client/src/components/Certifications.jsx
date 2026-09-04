@@ -11,15 +11,15 @@ export function Certifications({ certifications }) {
         <div className="mb-16 md:mb-24">
           <Reveal>
             <div className="inline-block relative">
-              <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-sans font-bold text-cream tracking-tighter">
-                Certifications<span className="text-terra">.</span>
+              <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-cream drop-shadow-lg">
+                Certifications<span className="text-slate-blue">.</span>
               </h2>
               <motion.div 
                 initial={{ width: 0 }}
                 whileInView={{ width: "70%" }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
-                className="absolute -bottom-2 md:-bottom-4 left-0 h-[3px] md:h-[4px] bg-gradient-to-r from-terra via-sage to-transparent rounded-full"
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+                className="absolute -bottom-3 left-0 h-[3px] bg-gradient-to-r from-slate-blue to-transparent rounded-full"
               />
             </div>
           </Reveal>
@@ -51,7 +51,7 @@ export function Certifications({ certifications }) {
                     {cert.title}
                   </h3>
                   
-                  <div className="text-lg text-cream/70 font-medium">
+                  <div className="text-lg text-terra font-medium">
                     {cert.issuer}
                   </div>
                 </div>

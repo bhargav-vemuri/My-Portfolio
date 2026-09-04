@@ -21,14 +21,14 @@ export function Skills({ skills = [] }) {
         <div className="flex flex-col items-center text-center pb-8 border-b border-cream/10 mb-8">
           <div className="relative inline-block">
             <h2 className="font-sans font-bold text-5xl md:text-6xl tracking-tight text-cream drop-shadow-lg">
-              Skills & Technologies<span className="text-terra">.</span>
+              Skills & Technologies<span className="text-sage">.</span>
             </h2>
             <motion.div 
               initial={{ width: 0, left: "50%", x: "-50%" }}
               whileInView={{ width: "70%" }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="absolute -bottom-3 h-[3px] bg-gradient-to-r from-transparent via-terra to-transparent rounded-full"
+              className="absolute -bottom-3 h-[3px] bg-gradient-to-r from-transparent via-sage to-transparent rounded-full"
             />
           </div>
         </div>
