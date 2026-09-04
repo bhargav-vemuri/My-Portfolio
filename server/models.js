@@ -32,7 +32,21 @@ const SkillSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const SettingsSchema = new mongoose.Schema({
-  resumeUrl: { type: String, default: "" }
+  resumeUrl: { type: String, default: "" },
+  resumes: {
+    type: [{
+      name: { type: String },
+      url: { type: String }
+    }],
+    default: []
+  }
+}, { timestamps: true });
+
+const CertificationSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  issuer: { type: String, required: true },
+  date: { type: String, required: true },
+  link: { type: String, default: "" }
 }, { timestamps: true });
 
 module.exports = {
@@ -40,5 +54,6 @@ module.exports = {
   Experience: mongoose.model('Experience', ExperienceSchema),
   Education: mongoose.model('Education', EducationSchema),
   Skill: mongoose.model('Skill', SkillSchema),
-  Settings: mongoose.model('Settings', SettingsSchema)
+  Settings: mongoose.model('Settings', SettingsSchema),
+  Certification: mongoose.model('Certification', CertificationSchema)
 };

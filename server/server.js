@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
 const { z } = require('zod');
 
-const { Project, Experience, Education, Skill, Settings } = require('./models');
+const { Project, Experience, Education, Skill, Settings, Certification } = require('./models');
 
 const app = express();
 
@@ -203,8 +203,19 @@ const skillSchema = z.object({
   name: z.string().min(1, "Skill name is required")
 });
 
+const certificationSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  issuer: z.string().min(1, "Issuer is required"),
+  date: z.string().min(1, "Date is required"),
+  link: z.string().optional()
+});
+
 const settingsSchema = z.object({
-  resumeUrl: z.string().optional()
+  resumeUrl: z.string().optional(),
+  resumes: z.array(z.object({
+    name: z.string().min(1, "Name is required"),
+    url: z.string().min(1, "URL is required")
+  })).optional()
 });
 
 const validateSchema = (schema) => (req, res, next) => {
@@ -221,6 +232,7 @@ const getModelSchema = (path) => {
   if (path === 'experience') return experienceSchema;
   if (path === 'education') return educationSchema;
   if (path === 'skills') return skillSchema;
+  if (path === 'certifications') return certificationSchema;
   return z.any();
 };
 
@@ -289,6 +301,7 @@ buildCrudRoutes(Project, 'projects');
 buildCrudRoutes(Experience, 'experience');
 buildCrudRoutes(Education, 'education');
 buildCrudRoutes(Skill, 'skills');
+buildCrudRoutes(Certification, 'certifications');
 
 // Settings Routes
 app.get('/api/settings', async (req, res) => {

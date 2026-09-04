@@ -6,6 +6,7 @@ import { Projects } from "../components/Projects";
 import { Experience } from "../components/Experience";
 import { Education } from "../components/Education";
 import { Skills } from "../components/Skills";
+import { Certifications } from "../components/Certifications";
 import { Footer } from '../components/Footer';
 import { AmbientBackground } from '../components/AmbientBackground';
 import { Navbar } from '../components/Navbar';
@@ -29,6 +30,7 @@ export default function Home() {
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
   const [skills, setSkills] = useState([]);
+  const [certifications, setCertifications] = useState([]);
   const [settings, setSettings] = useState({});
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -49,13 +51,15 @@ export default function Home() {
       fetch(`${API_URL}/api/experience`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${API_URL}/api/education`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${API_URL}/api/skills`, { credentials: 'include' }).then(r => r.json()),
+      fetch(`${API_URL}/api/certifications`, { credentials: 'include' }).then(r => r.json()),
       fetch(`${API_URL}/api/settings`, { credentials: 'include' }).then(r => r.ok ? r.json() : { resumeUrl: "" }).catch(() => ({ resumeUrl: "" }))
-    ]).then(([p, e, ed, s, setRes]) => {
+    ]).then(([p, e, ed, s, c, setRes]) => {
       // Provide fallback empty arrays if backend is disconnected
       setProjects(Array.isArray(p) ? p : []);
       setExperience(Array.isArray(e) ? e : []);
       setEducation(Array.isArray(ed) ? ed : []);
       setSkills(Array.isArray(s) ? s : []);
+      setCertifications(Array.isArray(c) ? c : []);
       setSettings(setRes || { resumeUrl: "" });
       
       setTimeout(() => setIsInitialLoad(false), 1200);
@@ -113,11 +117,12 @@ export default function Home() {
       <main className="flex min-h-screen flex-col items-center justify-between w-full relative">
       <AmbientBackground />
       <Hero />
-      <About resumeUrl={settings.resumeUrl} />
+      <About resumeUrl={settings.resumeUrl} resumes={settings.resumes || []} />
       <Projects projects={projects} />
       <Experience experience={experience} />
       <Education education={education} />
       <Skills skills={skills} />
+      <Certifications certifications={certifications} />
       <Footer />
     </main>
     </>

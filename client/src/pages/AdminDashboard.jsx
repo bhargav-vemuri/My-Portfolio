@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, Trash2, Plus } from "lucide-react";
 
 const API_URL = "https://my-portfolio-ek2r.onrender.com";
 
@@ -18,17 +18,18 @@ const apiFetch = async (url, options = {}) => {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("settings");
-  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [], settings: {} });
+  const [data, setData] = useState({ projects: [], experience: [], education: [], skills: [], certifications: [], settings: {} });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchAllData = async () => {
     try {
-      const [p, e, ed, s, setRes] = await Promise.all([
+      const [p, e, ed, s, c, setRes] = await Promise.all([
         apiFetch('/api/projects').then(r => r.json()),
         apiFetch('/api/experience').then(r => r.json()),
         apiFetch('/api/education').then(r => r.json()),
         apiFetch('/api/skills').then(r => r.json()),
+        apiFetch('/api/certifications').then(r => r.json()),
         apiFetch('/api/settings').then(r => r.ok ? r.json() : { resumeUrl: "" }).catch(() => ({ resumeUrl: "" }))
       ]);
       setData({
@@ -36,6 +37,7 @@ export default function AdminDashboard() {
         experience: Array.isArray(e) ? e : [],
         education: Array.isArray(ed) ? ed : [],
         skills: Array.isArray(s) ? s : [],
+        certifications: Array.isArray(c) ? c : [],
         settings: setRes || { resumeUrl: "" }
       });
     } catch(err) {
@@ -76,7 +78,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-4 mb-8">
-          {["settings", "projects", "experience", "education", "skills"].map(tab => (
+          {["settings", "projects", "experience", "education", "skills", "certifications"].map(tab => (
             <button 
               key={tab} 
               onClick={() => setActiveTab(tab)}
@@ -93,6 +95,7 @@ export default function AdminDashboard() {
         {activeTab === "experience" && <ExperienceTab data={data.experience} refresh={fetchAllData} />}
         {activeTab === "education" && <EducationTab data={data.education} refresh={fetchAllData} />}
         {activeTab === "skills" && <SkillsTab data={data.skills} refresh={fetchAllData} />}
+        {activeTab === "certifications" && <CertificationsTab data={data.certifications} refresh={fetchAllData} />}
       </div>
     </div>
   );
@@ -399,11 +402,17 @@ function SkillsTab({ data, refresh }) {
 }
 
 function SettingsTab({ data, refresh }) {
-  const [formData, setFormData] = useState({ resumeUrl: data?.resumeUrl || "" });
+  const [formData, setFormData] = useState({ 
+    resumeUrl: data?.resumeUrl || "",
+    resumes: data?.resumes || []
+  });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setFormData({ resumeUrl: data?.resumeUrl || "" });
+    setFormData({ 
+      resumeUrl: data?.resumeUrl || "",
+      resumes: data?.resumes || []
+    });
   }, [data]);
 
   const handleSave = async () => {
@@ -413,12 +422,32 @@ function SettingsTab({ data, refresh }) {
     refresh();
   };
 
+  const addResume = () => {
+    setFormData({
+      ...formData,
+      resumes: [...formData.resumes, { name: "", url: "" }]
+    });
+  };
+
+  const updateResume = (index, field, value) => {
+    const newResumes = [...formData.resumes];
+    newResumes[index][field] = value;
+    setFormData({ ...formData, resumes: newResumes });
+  };
+
+  const removeResume = (index) => {
+    const newResumes = formData.resumes.filter((_, i) => i !== index);
+    setFormData({ ...formData, resumes: newResumes });
+  };
+
   return (
     <div className="bg-[#0f172a]/80 p-8 rounded-3xl border border-muted/20 shadow-xl">
       <h2 className="text-2xl font-serif mb-6 text-accent">General Settings</h2>
-      <div className="flex flex-col gap-4 max-w-xl">
+      <div className="flex flex-col gap-6 max-w-2xl">
+        
+        {/* Legacy Primary Resume */}
         <label className="flex flex-col gap-2">
-          <span className="text-muted font-medium">Resume File Path / URL</span>
+          <span className="text-muted font-medium">Default / Fallback Resume URL</span>
           <input 
             type="text" 
             placeholder="/uploads/resume.pdf"
@@ -426,10 +455,55 @@ function SettingsTab({ data, refresh }) {
             value={formData.resumeUrl} 
             onChange={e => setFormData({ ...formData, resumeUrl: e.target.value })} 
           />
-          <p className="text-xs text-muted/80 mt-1">
-            Drag and drop your PDF into the <code>client/public/uploads</code> folder and reference it here (e.g. <code>/uploads/resume.pdf</code>).
-          </p>
         </label>
+
+        <hr className="border-muted/20" />
+
+        {/* Dynamic Resumes */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <span className="text-muted font-medium">Download Options (Multiple Resumes)</span>
+            <button 
+              onClick={addResume}
+              className="flex items-center gap-2 text-accent text-sm font-medium hover:text-accent/80 transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Add Option
+            </button>
+          </div>
+          
+          <div className="flex flex-col gap-4">
+            {formData.resumes.map((resume, idx) => (
+              <div key={idx} className="flex gap-4 items-start bg-background/30 p-4 rounded-xl border border-muted/20">
+                <div className="flex-1 flex flex-col gap-4">
+                  <input 
+                    type="text" 
+                    placeholder="Role Name (e.g., SDE Resume)"
+                    className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none font-sans text-sm" 
+                    value={resume.name} 
+                    onChange={e => updateResume(idx, 'name', e.target.value)} 
+                  />
+                  <input 
+                    type="text" 
+                    placeholder="PDF URL (e.g., /uploads/SDE.pdf)"
+                    className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none font-mono text-sm" 
+                    value={resume.url} 
+                    onChange={e => updateResume(idx, 'url', e.target.value)} 
+                  />
+                </div>
+                <button 
+                  onClick={() => removeResume(idx)}
+                  className="p-3 text-red-400 hover:text-red-300 hover:bg-red-400/10 rounded-xl transition-colors mt-1"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+            ))}
+            {formData.resumes.length === 0 && (
+              <p className="text-muted/50 text-sm italic">No specific resume options added yet.</p>
+            )}
+          </div>
+        </div>
+
         <button 
           onClick={handleSave} 
           disabled={saving}
@@ -437,6 +511,74 @@ function SettingsTab({ data, refresh }) {
         >
           {saving ? "Saving..." : "Save Settings"}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function CertificationsTab({ data, refresh }) {
+  const [editingId, setEditingId] = useState(null);
+  const [formData, setFormData] = useState({ title: "", issuer: "", date: "", link: "" });
+
+  const handleSave = async () => {
+    if (editingId) {
+      await apiFetch(`/api/certifications/${editingId}`, { method: 'PUT', body: JSON.stringify(formData) });
+    } else {
+      await apiFetch('/api/certifications', { method: 'POST', body: JSON.stringify(formData) });
+    }
+    setEditingId(null);
+    setFormData({ title: "", issuer: "", date: "", link: "" });
+    refresh();
+  };
+
+  const handleEdit = (cert) => {
+    setEditingId(cert._id);
+    setFormData({ title: cert.title, issuer: cert.issuer, date: cert.date, link: cert.link || "" });
+  };
+
+  const handleDelete = async (id) => {
+    if (confirm("Are you sure you want to delete this certification?")) {
+      await apiFetch(`/api/certifications/${id}`, { method: 'DELETE' });
+      refresh();
+    }
+  };
+
+  return (
+    <div className="bg-[#0f172a]/20 p-8 rounded-xl border border-muted/10 flex flex-col gap-4 shadow-xl">
+      <h2 className="text-xl font-serif text-accent">Add / Edit Certification</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input type="text" placeholder="Title (e.g. AWS Solutions Architect)" className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} />
+        <input type="text" placeholder="Issuer (e.g. Amazon Web Services)" className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none" value={formData.issuer} onChange={e => setFormData({ ...formData, issuer: e.target.value })} />
+        <input type="text" placeholder="Date (e.g. Aug 2026)" className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} />
+        <input type="text" placeholder="Link / Credential URL (Optional)" className="p-3 bg-background/50 border border-muted/30 rounded-xl focus:border-accent outline-none" value={formData.link} onChange={e => setFormData({ ...formData, link: e.target.value })} />
+      </div>
+      <div className="flex gap-2">
+        <button onClick={handleSave} className="px-6 py-3 bg-accent text-background rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-accent/80 transition-colors w-fit">
+          {editingId ? "Update Certification" : "Add Certification"}
+        </button>
+        {editingId && (
+          <button onClick={() => { setEditingId(null); setFormData({ title: "", issuer: "", date: "", link: "" }); }} className="px-6 py-3 border border-muted/30 text-muted rounded-xl font-bold uppercase tracking-widest text-sm hover:bg-muted/10 transition-colors w-fit">
+            Cancel
+          </button>
+        )}
+      </div>
+
+      <h2 className="text-xl font-serif text-accent mt-8">Current Certifications</h2>
+      <div className="flex flex-col gap-4">
+        {data.map(cert => (
+          <div key={cert._id} className="p-6 border border-muted/20 rounded-xl bg-[#0f172a]/20 flex justify-between items-start shadow-md hover:border-accent/30 transition-colors">
+            <div className="flex flex-col">
+              <h3 className="font-bold text-foreground text-lg">{cert.title}</h3>
+              <span className="text-muted text-sm">{cert.issuer} • {cert.date}</span>
+              {cert.link && <a href={cert.link} target="_blank" rel="noreferrer" className="text-accent text-sm mt-1 hover:underline">View Credential</a>}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => handleEdit(cert)} className="px-3 py-1 bg-muted/20 text-muted rounded-md hover:text-foreground hover:bg-muted/40 transition-colors text-sm">Edit</button>
+              <button onClick={() => handleDelete(cert._id)} className="px-3 py-1 bg-red-500/20 text-red-400 rounded-md hover:bg-red-500/40 hover:text-red-300 transition-colors text-sm">Delete</button>
+            </div>
+          </div>
+        ))}
+        {data.length === 0 && <p className="text-muted/50 italic">No certifications added yet.</p>}
       </div>
     </div>
   );
